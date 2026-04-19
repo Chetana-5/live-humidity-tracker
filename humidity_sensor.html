@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script src="{{url_for('static', filename='js/canvasjs.min.js')}}"></script>
+
+<script>
+async function fetchJSON(request) {
+    try {
+        const response = await fetch(request);
+        const jsonData = await response.json();
+        return jsonData;
+    } catch (error) {
+        console.error("Error:", error);
+    }
+}
+
+window.onload = async function () {
+
+    // HUMIDITY
+    let humidityData = await fetchJSON('data/humidity.json');
+
+    var humidityChart = new CanvasJS.Chart("chartContainer", {
+        zoomEnabled: false,
+        animationEnabled: false,
+        title: { text: "HUMIDITY" },
+        axisY: { lineThickness: 1 },
+        data: [{
+            type: "line",
+            dataPoints: humidityData
+        }]
+    });
+
+    humidityChart.render();
+
+
+    // TEMPERATURE
+    let temperatureData = await fetchJSON('data/temperature.json');
+
+    var temperatureChart = new CanvasJS.Chart("chartContainer2", {
+        zoomEnabled: false,
+        animationEnabled: false,
+        title: { text: "TEMPERATURE" },
+        axisY: { lineThickness: 1 },
+        data: [{
+            type: "line",
+            dataPoints: temperatureData
+        }]
+    });
+
+    temperatureChart.render();
+}
+</script>
+</head>
+
+<body>
+<h1>LIVE TEMPERATURE AND HUMIDITY</h1>
+
+<div id="chartContainer" style="height: 370px; width: 100%;"></div>
+<div id="chartContainer2" style="height: 370px; width: 100%;"></div>
+
+</body>
+</html>
