@@ -5,8 +5,6 @@
 ![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)
 ![Flask](https://img.shields.io/badge/Flask-2.x-black?logo=flask)
 ![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-GPIO-red?logo=raspberrypi)
-
-
 ---
 
 ## ✨ Features
@@ -26,30 +24,28 @@
 ---
 
 ## 🚀 Installation
-
-\```bash
+```
 git clone https://github.com/Chetana-5/live-humidity-tracker.git
 cd live-humidity-tracker
 pip install -r requirements.txt
-\```
+```
 
 ## ▶️ Usage
-
-\```bash
+```
 # Terminal 1 — Start sensor
 python sensor.py
 
 # Terminal 2 — Start web server
 cd webapp
 python flask_server.py
-\```
+```
 
 Then open `http://<raspberry-pi-ip>:5000` in your browser.
 
 ---
 
 ## 📁 Project Structure
-\```
+```
 live-humidity-tracker/
 ├── sensor.py
 ├── requirements.txt
@@ -58,7 +54,7 @@ live-humidity-tracker/
     ├── templates/index.html
     ├── static/js/
     └── data/
-\```
+```
 
 ---
 
