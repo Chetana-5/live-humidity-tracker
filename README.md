@@ -1,62 +1,87 @@
-# 🌡️ Live Humidity & Temperature Tracker
+# DHT22 Live Sensor Dashboard
 
-> Real-time temperature and humidity monitoring using DHT22 sensor and Raspberry Pi, visualized in a web dashboard.
-
-![Python](https://img.shields.io/badge/Python-3.x-blue?logo=python)
-![Flask](https://img.shields.io/badge/Flask-2.x-black?logo=flask)
-![Raspberry Pi](https://img.shields.io/badge/Raspberry%20Pi-GPIO-red?logo=raspberrypi)
----
-
-## ✨ Features
-- 📡 Reads live data from DHT22 sensor every 3 seconds
-- 📊 Displays real-time temperature & humidity charts
-- 🌐 Accessible from any device on the local network
-- 🔄 Auto-refreshes every 5 seconds
-
----
-
-## 🔧 Hardware Required
-- Raspberry Pi (any model)
-- DHT22 Sensor
-- 10kΩ resistor
-- Jumper wires
-
----
-
-## 🚀 Installation
-```
-git clone https://github.com/Chetana-5/live-humidity-tracker.git
-cd live-humidity-tracker
-pip install -r requirements.txt
-```
-
-## ▶️ Usage
-```
-# Terminal 1 — Start sensor
-python sensor.py
-
-# Terminal 2 — Start web server
-cd webapp
-python flask_server.py
-```
-
-Then open `http://<raspberry-pi-ip>:5000` in your browser.
+A Raspberry Pi project that reads temperature and humidity from a **DHT22 sensor** and displays live charts in a web browser using Flask and CanvasJS.
 
 ---
 
 ## 📁 Project Structure
+
 ```
-live-humidity-tracker/
-├── sensor.py
-├── requirements.txt
+dht22-dashboard/
+├── sensor.py                  # Reads DHT22 sensor, writes JSON data files
+├── requirements.txt           # Python dependencies
+├── .gitignore
 └── webapp/
-    ├── flask_server.py
-    ├── templates/index.html
-    ├── static/js/
+    ├── flask_server.py        # Flask web server
+    ├── templates/
+    │   └── index.html         # Live chart dashboard
+    ├── static/
+    │   └── js/
+    │       └── canvasjs.min.js  # ← You must add this (see setup below)
     └── data/
+        ├── humidity.json      # Auto-generated at runtime
+        └── temperature.json   # Auto-generated at runtime
 ```
 
 ---
 
-## 👩‍💻 Author
-**Chetana Srinivas** — [GitHub](https://github.com/Chetana-5)
+## 🔧 Hardware Requirements
+
+- Raspberry Pi (any model with GPIO)
+- DHT22 temperature & humidity sensor
+- 10kΩ pull-up resistor between VCC and DATA
+- Wiring: DATA pin → GPIO 4 (board.D4)
+
+---
+
+## 🚀 Setup & Installation
+
+### 1. Clone the repository
+```bash
+git clone https://github.com/YOUR_USERNAME/dht22-dashboard.git
+cd dht22-dashboard
+```
+
+### 2. Install Python dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 3. Add CanvasJS
+Download `canvasjs.min.js` from [canvasjs.com](https://canvasjs.com) and place it at:
+```
+webapp/static/js/canvasjs.min.js
+```
+
+### 4. Run the sensor script (Terminal 1)
+```bash
+python sensor.py
+```
+
+### 5. Run the Flask web server (Terminal 2)
+```bash
+cd webapp
+python flask_server.py
+```
+
+### 6. Open the dashboard
+Visit `http://<raspberry-pi-ip>:5000` in your browser.  
+The charts auto-refresh every **5 seconds**.
+
+---
+
+## 📊 How It Works
+
+| Component | Role |
+|---|---|
+| `sensor.py` | Polls DHT22 every 3s, appends readings to JSON files |
+| `flask_server.py` | Serves the web app and exposes JSON data via `/data/` |
+| `index.html` | Fetches JSON and renders live line charts with CanvasJS |
+
+---
+
+## 📝 Notes
+
+- `humidity.json` and `temperature.json` are generated at runtime and excluded from git.
+- The sensor occasionally produces read errors — these are normal for DHT sensors and are safely retried.
+- For production use, consider running both scripts as `systemd` services.
